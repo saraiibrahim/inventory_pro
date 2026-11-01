@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_pro/core/theme/app_theme.dart';
-import 'package:inventory_pro/data/models/transaction_model.dart'; // 🔧 بدل import من sales_screen.dart
+import 'package:inventory_pro/data/models/transaction_model.dart';
+import 'package:inventory_pro/widgets/status_badge.dart';
 
 class TransactionDetailsSheet extends StatelessWidget {
   final TransactionModel transaction;
@@ -78,7 +79,7 @@ class TransactionDetailsSheet extends StatelessWidget {
                   ),
                 ],
               ),
-              _buildStatusBadge(transaction.status),
+              StatusBadge(status: transaction.status),
             ],
           ),
           const SizedBox(height: 24),
@@ -241,41 +242,6 @@ class TransactionDetailsSheet extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildStatusBadge(TransactionStatus status) {
-    String label;
-    Color color;
-    switch (status) {
-      case TransactionStatus.paid:
-        label = "Paid";
-        color = const Color(0xFF34C759);
-        break;
-      case TransactionStatus.partial:
-        label = "Partial";
-        color = const Color(0xFFFF9500);
-        break;
-      case TransactionStatus.pending:
-        label = "Pending";
-        color = AppTheme.alertRed;
-        break;
-    }
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w900,
-          color: color,
-        ),
-      ),
     );
   }
 }

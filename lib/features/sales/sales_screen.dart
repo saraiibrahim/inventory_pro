@@ -4,6 +4,7 @@ import 'package:inventory_pro/data/models/transaction_model.dart'; // 🔧
 import 'package:inventory_pro/logic/cubits/transaction_cubit.dart'; // 🔧
 import 'package:inventory_pro/features/sales/transiction_sheet.dart';
 import 'package:inventory_pro/core/utils/sales_math.dart'; // 🔧
+import 'package:inventory_pro/widgets/status_badge.dart';
 
 // 🔧 كلاس SalesTransaction و TransactionStatus اتشالوا من هنا، دلوقتي في data/models/transaction_model.dart
 
@@ -499,7 +500,7 @@ class PremiumTransactionRow extends StatelessWidget {
                       const SizedBox(width: 8),
 
                       // 🏷️ الـ Status Badge الدقيقة
-                      _buildStatusChip(transaction.status),
+                      StatusBadge(status: transaction.status, compact: true),
                     ],
                   ),
                 ],
@@ -526,40 +527,4 @@ class PremiumTransactionRow extends StatelessWidget {
   }
 
   // 🏷️ دالة مساعدة لإنشاء الـ Status Badge المطابقة لأعلى معايير الـ UX الهادئ والبريميوم
-  Widget _buildStatusChip(TransactionStatus status) {
-    String label;
-    Color color;
-
-    switch (status) {
-      case TransactionStatus.paid:
-        label = "Paid";
-        color = const Color(0xFF34C759); // أخضر هادئ
-        break;
-      case TransactionStatus.partial:
-        label = "Partial";
-        color = const Color(0xFFFF9500); // برتقالي هادئ جداً للمستحقات الجزئية
-        break;
-      case TransactionStatus.pending:
-        label = "Pending";
-        color = const Color(0xFFFF453A); // أحمر دافئ للمتأخرات
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withValues(alpha: 0.15), width: 0.5),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w800,
-          color: color,
-        ),
-      ),
-    );
-  }
 }
