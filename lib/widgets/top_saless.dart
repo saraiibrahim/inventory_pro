@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_pro/core/theme/app_theme.dart';
 import 'package:inventory_pro/core/utils/product_lookup.dart';
-import 'package:inventory_pro/core/utils/sales_math.dart'; // 🔧
-import 'package:inventory_pro/data/models/product_model.dart'; // 🔧
-import 'package:inventory_pro/data/models/transaction_model.dart'; // 🔧
-import 'package:inventory_pro/logic/cubits/product_cubit.dart'; // 🔧
-import 'package:inventory_pro/logic/cubits/transaction_cubit.dart'; // 🔧
+import 'package:inventory_pro/core/utils/sales_math.dart';
+import 'package:inventory_pro/data/models/product_model.dart';
+import 'package:inventory_pro/data/models/transaction_model.dart';
+import 'package:inventory_pro/logic/cubits/product_cubit.dart';
+import 'package:inventory_pro/logic/cubits/transaction_cubit.dart';
 
 class TopSalesWidget extends StatelessWidget {
   const TopSalesWidget({super.key});
@@ -33,13 +33,13 @@ class TopSalesWidget extends StatelessWidget {
             ? []
             : [
                 BoxShadow(
-                  color: theme.colorScheme.primary.withOpacity(0.03),
+                  color: theme.colorScheme.primary.withValues(alpha: 0.03),
                   blurRadius: 20,
                   spreadRadius: 0,
                   offset: const Offset(0, 8),
                 ),
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.01),
+                  color: Colors.black.withValues(alpha: 0.01),
                   blurRadius: 4,
                   spreadRadius: 0,
                   offset: const Offset(0, 2),
@@ -71,10 +71,11 @@ class TopSalesWidget extends StatelessWidget {
                             fontWeight: FontWeight.w900,
                             fontSize: 10,
                             color: isDark
-                                ? Colors.white.withOpacity(0.5)
-                                : theme.colorScheme.primary.withOpacity(0.6),
+                                ? Colors.white.withValues(alpha: 0.5)
+                                : theme.colorScheme.primary.withValues(
+                                    alpha: 0.6,
+                                  ),
                             letterSpacing: 1.2,
-                            fontFamily: 'Urbanist',
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -86,7 +87,6 @@ class TopSalesWidget extends StatelessWidget {
                             color: isDark
                                 ? Colors.white70
                                 : theme.textTheme.bodyLarge?.color,
-                            fontFamily: 'Urbanist',
                           ),
                         ),
                       ],
@@ -119,7 +119,9 @@ class TopSalesWidget extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: topProducts.length,
                         separatorBuilder: (context, index) => Divider(
-                          color: theme.colorScheme.outline.withOpacity(0.5),
+                          color: theme.colorScheme.outline.withValues(
+                            alpha: 0.5,
+                          ),
                           height: 20,
                           thickness: 1,
                         ),
@@ -134,8 +136,8 @@ class TopSalesWidget extends StatelessWidget {
                                 height: 28,
                                 decoration: BoxDecoration(
                                   color: isDark
-                                      ? Colors.white.withOpacity(0.03)
-                                      : Colors.black.withOpacity(0.03),
+                                      ? Colors.white.withValues(alpha: 0.03)
+                                      : Colors.black.withValues(alpha: 0.03),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 alignment: Alignment.center,
@@ -161,7 +163,6 @@ class TopSalesWidget extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
-                                        fontFamily: 'Urbanist',
                                         color: theme.textTheme.bodyLarge?.color,
                                       ),
                                       maxLines: 1,
@@ -175,7 +176,6 @@ class TopSalesWidget extends StatelessWidget {
                                         color: isDark
                                             ? Colors.white38
                                             : theme.textTheme.bodyMedium?.color,
-                                        fontFamily: 'Urbanist',
                                       ),
                                     ),
                                   ],
@@ -200,7 +200,6 @@ class TopSalesWidget extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: 'Urbanist',
                                       color: isNegative
                                           ? AppTheme.alertRed
                                           : (isDark

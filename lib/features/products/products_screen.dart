@@ -60,8 +60,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: isDark
-                      ? Colors.white.withOpacity(0.05)
-                      : Colors.black.withOpacity(0.02),
+                      ? Colors.white.withValues(alpha: 0.05)
+                      : Colors.black.withValues(alpha: 0.02),
                 ),
               ),
               child: IconButton(
@@ -91,8 +91,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isDark
-                            ? Colors.white.withOpacity(0.04)
-                            : Colors.black.withOpacity(0.02),
+                            ? Colors.white.withValues(alpha: 0.04)
+                            : Colors.black.withValues(alpha: 0.02),
                       ),
                     ),
                     child: TextField(
@@ -134,8 +134,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: isDark
-                            ? Colors.white.withOpacity(0.04)
-                            : Colors.black.withOpacity(0.02),
+                            ? Colors.white.withValues(alpha: 0.04)
+                            : Colors.black.withValues(alpha: 0.02),
                       ),
                     ),
                     child: Row(
@@ -236,8 +236,8 @@ class CompactProductListRow extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: isDark
-                ? Colors.white.withOpacity(0.04)
-                : Colors.black.withOpacity(0.02),
+                ? Colors.white.withValues(alpha: 0.04)
+                : Colors.black.withValues(alpha: 0.02),
           ),
         ),
         child: Row(
@@ -247,8 +247,8 @@ class CompactProductListRow extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.white.withOpacity(0.1)
-                    : Colors.black.withOpacity(0.01),
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : Colors.black.withValues(alpha: 0.01),
                 borderRadius: BorderRadius.circular(12),
               ),
               padding: const EdgeInsets.all(4),
@@ -302,8 +302,8 @@ class CompactProductListRow extends StatelessWidget {
                     fontSize: 10,
                     fontWeight: FontWeight.w500,
                     color: isLowStock
-                        ? const Color(0xFFFF453A).withOpacity(0.8)
-                        : theme.colorScheme.primary.withOpacity(0.8),
+                        ? const Color(0xFFFF453A).withValues(alpha: 0.8)
+                        : theme.colorScheme.primary.withValues(alpha: 0.8),
                   ),
                 ),
               ],

@@ -85,7 +85,7 @@ class CurvedChartPainter extends CustomPainter {
 
     // رسم الخط الثاني
     var paint2 = Paint()
-      ..color = isMini ? Colors.grey.withOpacity(0.15) : secondLineColor
+      ..color = isMini ? Colors.grey.withValues(alpha: 0.15) : secondLineColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = isMini ? 1.5 : 2.5;
 
@@ -217,7 +217,7 @@ class MiniGrowthPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [color.withOpacity(0.2), color.withOpacity(0.0)],
+        colors: [color.withValues(alpha: 0.2), color.withValues(alpha: 0.0)],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
 
     canvas.drawPath(fillPath, paintFill);

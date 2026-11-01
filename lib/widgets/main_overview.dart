@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventory_pro/core/theme/app_theme.dart'; // استيراد الثيم الموحد
 
-/* STREAMING_CHUNK: Initializing Main Overview Widget and properties... */
 class MainOverviewCard extends StatelessWidget {
   final String totalSales;
   final double salesGrowth;
@@ -12,20 +11,12 @@ class MainOverviewCard extends StatelessWidget {
 
   const MainOverviewCard({
     super.key,
-    this.totalSales = "\$842.5k",
-    this.salesGrowth = 12.4,
-    this.totalProducts = 120,
-    this.lowStockItems = 5,
-    this.outOfStockItems = 2,
-    this.sparklineData = const [
-      120.0,
-      300.5,
-      180.0,
-      450.2,
-      290.0,
-      600.0,
-      350.0,
-    ],
+    required this.totalSales,
+    required this.salesGrowth,
+    required this.totalProducts,
+    required this.lowStockItems,
+    required this.outOfStockItems,
+    required this.sparklineData,
   });
 
   @override
@@ -43,7 +34,6 @@ class MainOverviewCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /* STREAMING_CHUNK: Styling the Header Row of the Overview Card... */
           // 1️⃣ السطر العلوي
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -54,10 +44,9 @@ class MainOverviewCard extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                   fontSize: 10,
                   color: isDark
-                      ? Colors.white.withOpacity(0.5)
-                      : theme.colorScheme.primary.withOpacity(0.6),
+                      ? Colors.white.withValues(alpha: 0.5)
+                      : theme.colorScheme.primary.withValues(alpha: 0.6),
                   letterSpacing: 1.2,
-                  fontFamily: 'Urbanist',
                 ),
               ),
               Container(
@@ -67,21 +56,16 @@ class MainOverviewCard extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: isDark
-                      ? Colors.white.withOpacity(0.04)
-                      : Colors.white.withOpacity(0.5),
+                      ? Colors.white.withValues(alpha: 0.04)
+                      : Colors.white.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: isDark
-                        ? Colors.white.withOpacity(0.02)
-                        : Colors.white.withOpacity(0.02),
-                  ),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
                 ),
                 child: Text(
                   "View metrics",
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
-                    fontFamily: 'Urbanist',
                     color: isDark ? Colors.white70 : theme.colorScheme.primary,
                   ),
                 ),
@@ -90,7 +74,6 @@ class MainOverviewCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          /* STREAMING_CHUNK: Designing the Bento Revenue Sparkline Card... */
           // 2️⃣ الكارت الكبير مع الشارت
           _BentoCard(
             height: 140,
@@ -118,7 +101,6 @@ class MainOverviewCard extends StatelessWidget {
                             fontSize: 12,
                             color: textMuted,
                             fontWeight: FontWeight.w600,
-                            fontFamily: 'Urbanist',
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -146,7 +128,6 @@ class MainOverviewCard extends StatelessWidget {
                                       : AppTheme.deepGreen,
                                   fontSize: 11,
                                   fontWeight: FontWeight.w900,
-                                  fontFamily: 'Urbanist',
                                 ),
                               ),
                             ],
@@ -169,9 +150,7 @@ class MainOverviewCard extends StatelessWidget {
                       child: CustomPaint(
                         painter: _DynamicMergedAreaPainter(
                           dataPoints: sparklineData,
-                          color: isDark
-                              ? AppTheme.neonGreen
-                              : AppTheme.neonGreen,
+                          color: AppTheme.neonGreen,
                         ),
                       ),
                     ),
@@ -182,7 +161,6 @@ class MainOverviewCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          /* STREAMING_CHUNK: Building the Triple Bento Grid for Items and Stocks... */
           // 3️⃣ الـ Bento Grid التلاتية الأحادية المتناسقة مع الشارت
           Row(
             children: [
@@ -212,11 +190,7 @@ class MainOverviewCard extends StatelessWidget {
                     value: "$lowStockItems",
                     theme: theme,
                     indicatorColor: lowStockItems == 0
-                        ? (isDark
-                              ? Colors.white24
-                              : Colors.grey.withOpacity(
-                                  0.3,
-                                )) // رمادي هادئ لو مفيش مشكلة
+                        ? Colors.grey.withValues(alpha: 0.4)
                         : const Color.fromARGB(
                             255,
                             240,
@@ -237,9 +211,7 @@ class MainOverviewCard extends StatelessWidget {
                     value: "$outOfStockItems",
                     theme: theme,
                     indicatorColor: outOfStockItems == 0
-                        ? (isDark
-                              ? Colors.white24
-                              : Colors.grey.withOpacity(0.3))
+                        ? Colors.grey.withValues(alpha: 0.4)
                         : AppTheme.alertRed, // الأحمر الدافئ للـ Out of stock
                   ),
                 ),
@@ -251,7 +223,6 @@ class MainOverviewCard extends StatelessWidget {
     );
   }
 
-  /* STREAMING_CHUNK: Generating custom widgets for mini statistics... */
   Widget _buildCleanMiniStat({
     required String label,
     required String value,
@@ -272,7 +243,6 @@ class MainOverviewCard extends StatelessWidget {
                 fontSize: 10.5,
                 color: isDark ? Colors.white54 : Colors.grey[600],
                 fontWeight: FontWeight.w700,
-                fontFamily: 'Urbanist',
               ),
             ),
             Container(
@@ -283,7 +253,7 @@ class MainOverviewCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: indicatorColor.withOpacity(0.4),
+                    color: indicatorColor.withValues(alpha: 0.4),
                     blurRadius: 4,
                     spreadRadius: 1,
                   ),
@@ -308,7 +278,6 @@ class MainOverviewCard extends StatelessWidget {
   }
 }
 
-/* STREAMING_CHUNK: Structuring the Premium Bento Container with Shadows... */
 class _BentoCard extends StatelessWidget {
   final Widget child;
   final ThemeData theme;
@@ -333,13 +302,13 @@ class _BentoCard extends StatelessWidget {
         ? []
         : [
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.025),
+              color: theme.colorScheme.primary.withValues(alpha: 0.025),
               blurRadius: 20,
               spreadRadius: 0,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: Colors.black.withOpacity(0.008),
+              color: Colors.black.withValues(alpha: 0.008),
               blurRadius: 4,
               spreadRadius: 0,
               offset: const Offset(0, 2),
@@ -360,7 +329,6 @@ class _BentoCard extends StatelessWidget {
   }
 }
 
-/* STREAMING_CHUNK: Custom painting the dynamic revenue chart line and gradient... */
 class _DynamicMergedAreaPainter extends CustomPainter {
   final List<double> dataPoints;
   final Color color;
@@ -421,10 +389,10 @@ class _DynamicMergedAreaPainter extends CustomPainter {
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,
       colors: [
-        color.withOpacity(0.0),
-        color.withOpacity(1.0),
-        color.withOpacity(1.0),
-        color.withOpacity(0.0),
+        color.withValues(alpha: 0.0),
+        color.withValues(alpha: 1.0),
+        color.withValues(alpha: 1.0),
+        color.withValues(alpha: 0.0),
       ],
       stops: const [0.0, 0.1, 0.9, 1.0],
     ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
@@ -440,7 +408,7 @@ class _DynamicMergedAreaPainter extends CustomPainter {
       ..shader = LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        colors: [color.withOpacity(0.12), color.withOpacity(0.0)],
+        colors: [color.withValues(alpha: 0.12), color.withValues(alpha: 0.0)],
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
       ..style = PaintingStyle.fill;
 

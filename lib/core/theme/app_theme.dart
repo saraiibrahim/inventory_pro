@@ -68,6 +68,7 @@ class AppTheme {
         primary: deepGreen,
         secondary: neonGreen,
         surface: cardLight,
+        error: alertRed,
         outline: Colors
             .transparent, // كروت نظيفة بدون حدود تعتمد كلياً على الظل الناعم
       ),
@@ -108,6 +109,7 @@ class AppTheme {
         secondary:
             mintGlow, // اللون الثانوي الفخم والجديد (الأزرق الفولاذي المطفأ)
         surface: cardDark,
+        error: alertRed,
         outline: Colors.white.withValues(
           alpha: 0.015,
         ), // لمعان زجاجي خفيف جداً لتحديد الكروت بالظلام

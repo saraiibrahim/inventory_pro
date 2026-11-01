@@ -32,14 +32,14 @@ class ProductCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
             color: isDark
-                ? Colors.white.withOpacity(0.05)
-                : Colors.black.withOpacity(0.03),
+                ? Colors.white.withValues(alpha: 0.05)
+                : Colors.black.withValues(alpha: 0.03),
           ),
           boxShadow: isDark
               ? []
               : [
                   BoxShadow(
-                    color: const Color(0xFF1A1D24).withOpacity(0.02),
+                    color: const Color(0xFF1A1D24).withValues(alpha: 0.02),
                     blurRadius: 16,
                     offset: const Offset(0, 4),
                   ),
@@ -60,7 +60,7 @@ class ProductCard extends StatelessWidget {
                   gradient: isDark
                       ? RadialGradient(
                           colors: [
-                            Colors.white.withOpacity(0.1),
+                            Colors.white.withValues(alpha: 0.1),
                             Colors.transparent,
                           ],
                           radius: 0.8,
@@ -98,7 +98,7 @@ class ProductCard extends StatelessWidget {
                                   (product.quantity < 10
                                           ? AppTheme.alertRed
                                           : green)
-                                      .withOpacity(0.4),
+                                      .withValues(alpha: 0.4),
                               blurRadius: 6,
                               spreadRadius: 1,
                             ),

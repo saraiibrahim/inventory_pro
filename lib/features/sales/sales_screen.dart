@@ -34,13 +34,13 @@ class _SalesScreenState extends State<SalesScreen> {
         ? []
         : [
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.03),
+              color: theme.colorScheme.primary.withValues(alpha: 0.03),
               blurRadius: 20,
               spreadRadius: 0,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: Colors.black.withOpacity(0.01),
+              color: Colors.black.withValues(alpha: 0.01),
               blurRadius: 4,
               spreadRadius: 0,
               offset: const Offset(0, 2),
@@ -197,7 +197,7 @@ class _SalesScreenState extends State<SalesScreen> {
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? const Color(0xFF1D2222)
-                                    : primaryGreen.withOpacity(0.05),
+                                    : primaryGreen.withValues(alpha: 0.05),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -237,7 +237,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: primaryGreen.withOpacity(0.08),
+                                    color: primaryGreen.withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
@@ -273,7 +273,7 @@ class _SalesScreenState extends State<SalesScreen> {
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? const Color(0xFF1D2222)
-                                    : primaryGreen.withOpacity(0.05),
+                                    : primaryGreen.withValues(alpha: 0.05),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -313,7 +313,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: primaryGreen.withOpacity(0.08),
+                                    color: primaryGreen.withValues(alpha: 0.08),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
@@ -428,10 +428,10 @@ class PremiumTransactionRow extends StatelessWidget {
 
     // ألوان هادئة جداً للفصل والتمييز بدون صخب (سهم صاعد مطفي للوارد، هابط صامت وداكن للصادر)
     final Color flowIconBg = isIncome
-        ? primaryGreen.withOpacity(0.08)
-        : const Color(
-            0xFF8E8E93,
-          ).withOpacity(0.08); // مصروفات المخازن برمز رمادي صامت وأنيق جداً
+        ? primaryGreen.withValues(alpha: 0.08)
+        : const Color(0xFF8E8E93).withValues(
+            alpha: 0.08,
+          ); // مصروفات المخازن برمز رمادي صامت وأنيق جداً
 
     final Color flowIconColor = isIncome
         ? primaryGreen
@@ -513,7 +513,9 @@ class PremiumTransactionRow extends StatelessWidget {
                 fontSize: 15,
                 fontWeight: FontWeight.w900,
                 fontFamily: 'monospace',
-                color: isIncome ? mainTextColor : textMuted.withOpacity(0.8),
+                color: isIncome
+                    ? mainTextColor
+                    : textMuted.withValues(alpha: 0.8),
                 letterSpacing: -0.3,
               ),
             ),
@@ -546,9 +548,9 @@ class PremiumTransactionRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withOpacity(0.15), width: 0.5),
+        border: Border.all(color: color.withValues(alpha: 0.15), width: 0.5),
       ),
       child: Text(
         label,

@@ -35,7 +35,7 @@ class CustomBentoNavBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(35),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(isDark ? 0.3 : 0.04),
+              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
               blurRadius: 25,
               offset: const Offset(0, 10),
             ),
@@ -49,8 +49,8 @@ class CustomBentoNavBar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.black.withOpacity(0.4)
-                    : Colors.white.withOpacity(0.7),
+                    ? Colors.black.withValues(alpha: 0.4)
+                    : Colors.white.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(35),
                 border: Border.all(color: theme.colorScheme.outline, width: 1),
               ),
@@ -76,7 +76,7 @@ class CustomBentoNavBar extends StatelessWidget {
                                     colors: [
                                       theme
                                           .primaryColor, // الموف البطل ديناميكياً
-                                      theme.primaryColor.withOpacity(0.7),
+                                      theme.primaryColor.withValues(alpha: 0.7),
                                     ],
                                     begin: Alignment.topLeft,
                                     end: Alignment.bottomRight,
@@ -85,8 +85,8 @@ class CustomBentoNavBar extends StatelessWidget {
                             boxShadow: isSelected
                                 ? [
                                     BoxShadow(
-                                      color: theme.primaryColor.withOpacity(
-                                        0.35,
+                                      color: theme.primaryColor.withValues(
+                                        alpha: 0.35,
                                       ),
                                       blurRadius: 12,
                                       offset: const Offset(0, 4),
@@ -99,8 +99,8 @@ class CustomBentoNavBar extends StatelessWidget {
                             color: isSelected
                                 ? Colors.white
                                 : (isDark
-                                      ? Colors.white.withOpacity(0.35)
-                                      : Colors.black.withOpacity(0.3)),
+                                      ? Colors.white.withValues(alpha: 0.35)
+                                      : Colors.black.withValues(alpha: 0.3)),
                             size: isSelected ? 22 : 20,
                           ),
                         ),

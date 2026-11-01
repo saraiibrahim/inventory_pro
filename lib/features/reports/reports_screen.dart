@@ -130,13 +130,13 @@ class ReportsScreen extends StatelessWidget {
         ? []
         : [
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.025),
+              color: theme.colorScheme.primary.withValues(alpha: 0.025),
               blurRadius: 20,
               spreadRadius: 0,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: Colors.black.withOpacity(0.008),
+              color: Colors.black.withValues(alpha: 0.008),
               blurRadius: 4,
               spreadRadius: 0,
               offset: const Offset(0, 2),
@@ -168,7 +168,6 @@ class ReportsScreen extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                         color: mainTextColor,
                         letterSpacing: -0.5,
-                        fontFamily: 'Urbanist',
                       ),
                     ),
                     Text(
@@ -178,7 +177,6 @@ class ReportsScreen extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                         color: mainTextColor,
                         letterSpacing: -0.5,
-                        fontFamily: 'Urbanist',
                       ),
                     ),
                   ],
@@ -212,7 +210,6 @@ class ReportsScreen extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w900,
                               color: mainTextColor,
-                              fontFamily: 'Urbanist',
                             ),
                           ),
                           Text(
@@ -221,7 +218,6 @@ class ReportsScreen extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w900,
                               color: mainTextColor,
-                              fontFamily: 'Urbanist',
                             ),
                           ),
                         ],
@@ -271,7 +267,6 @@ class ReportsScreen extends StatelessWidget {
                               color: textMuted,
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
-                              fontFamily: 'Urbanist',
                             ),
                           ),
                         )
@@ -305,7 +300,6 @@ class ReportsScreen extends StatelessWidget {
                             color: textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Urbanist',
                           ),
                         ),
                         const Spacer(),
@@ -360,7 +354,6 @@ class ReportsScreen extends StatelessWidget {
                             color: textMuted,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Urbanist',
                           ),
                         ),
                         const Spacer(),
@@ -403,7 +396,7 @@ class ReportsScreen extends StatelessWidget {
                                               (stockGrowth < 0
                                                       ? AppTheme.alertRed
                                                       : primaryGreen)
-                                                  .withOpacity(0.4),
+                                                  .withValues(alpha: 0.4),
                                           blurRadius: 4,
                                           spreadRadius: 1,
                                         ),
@@ -437,7 +430,6 @@ class ReportsScreen extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.w900,
                 color: mainTextColor,
-                fontFamily: 'Urbanist',
               ),
             ),
             const SizedBox(height: 12),
@@ -482,12 +474,7 @@ class ReportsScreen extends StatelessWidget {
   Widget _buildCryptoIndicator(String label, Color color) {
     return Text(
       label,
-      style: TextStyle(
-        color: color,
-        fontSize: 10,
-        fontWeight: FontWeight.w900,
-        fontFamily: 'Urbanist',
-      ),
+      style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900),
     );
   }
 
@@ -498,7 +485,7 @@ class ReportsScreen extends StatelessWidget {
       width: 6,
       height: height,
       decoration: BoxDecoration(
-        color: isGlowing ? themeAccent : Colors.grey.withOpacity(0.2),
+        color: isGlowing ? themeAccent : Colors.grey.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(3),
       ),
     );
@@ -544,7 +531,6 @@ class ReportsScreen extends StatelessWidget {
                   color: textMuted,
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
-                  fontFamily: 'Urbanist',
                 ),
               ),
               const SizedBox(height: 2),
@@ -554,15 +540,13 @@ class ReportsScreen extends StatelessWidget {
                   fontSize: 15,
                   fontWeight: FontWeight.w900,
                   color: mainTextColor,
-                  fontFamily: 'Urbanist',
                 ),
               ),
               Text(
                 subtitle,
                 style: TextStyle(
-                  color: textMuted.withOpacity(0.8),
+                  color: textMuted.withValues(alpha: 0.8),
                   fontSize: 12,
-                  fontFamily: 'Urbanist',
                 ),
               ),
             ],

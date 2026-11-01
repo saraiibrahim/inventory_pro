@@ -122,15 +122,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
                     color: isDark ? Colors.white : Colors.black87,
                   ),
-                  onPressed: () {
-                    ThemeMode currentMode = theme.brightness == Brightness.dark
-                        ? ThemeMode.dark
-                        : ThemeMode.light;
-                    ThemeManager.themeModeNotifier.value =
-                        currentMode == ThemeMode.dark
-                        ? ThemeMode.light
-                        : ThemeMode.dark;
-                  },
+                  onPressed: ThemeManager.toggleTheme,
                 ),
               ],
             )
