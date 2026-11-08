@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_pro/core/painters/report_painters.dart';
 import 'package:inventory_pro/core/theme/app_theme.dart';
-import 'package:inventory_pro/core/utils/product_lookup.dart';
-import 'package:inventory_pro/core/utils/sales_math.dart';
-import 'package:inventory_pro/core/utils/report_math.dart';
+import 'package:inventory_pro/core/utils/report_data.dart';
 import 'package:inventory_pro/data/models/product_model.dart';
 import 'package:inventory_pro/data/models/transaction_model.dart';
 import 'package:inventory_pro/logic/cubits/product_cubit.dart';
@@ -25,79 +23,16 @@ class ReportsScreen extends StatelessWidget {
         ? prodState.products
         : <ProductModel>[];
 
-    final now = DateTime.now();
+    final data = ReportData.from(transactions, products);
 
-    // --- Stock Volatility: عدد حركات المخزون في آخر 7 أيام ---
-    final sevenDaysAgo = now.subtract(const Duration(days: 7));
-    final movementsLast7Days = transactions
-        .where(
-          (t) =>
-              t.quantityChange != 0 &&
-              DateTime.fromMillisecondsSinceEpoch(
-                t.timestamp,
-              ).isAfter(sevenDaysAgo),
-        )
-        .length;
+    final movementsLast7Days = data.movementsLast7Days;
+    final weeklyMovementCounts = data.weeklyMovementCounts;
+    final maxWeekly = data.maxWeekly;
+    final stockGrowth = data.stockGrowth;
+    final topCategories = data.topCategories;
+    final monthLabels = data.monthLabels;
+    final categorySeries = data.categorySeries;
 
-    final weeklyMovementCounts = List.generate(4, (i) {
-      final weekStart = now.subtract(Duration(days: 7 * (4 - i)));
-      final weekEnd = now.subtract(Duration(days: 7 * (3 - i)));
-      return transactions.where((t) {
-        final d = DateTime.fromMillisecondsSinceEpoch(t.timestamp);
-        return t.quantityChange != 0 &&
-            !d.isBefore(weekStart) &&
-            d.isBefore(weekEnd);
-      }).length;
-    });
-    final maxWeekly = weeklyMovementCounts.fold<int>(
-      1,
-      (m, v) => v > m ? v : m,
-    );
-
-    // --- Stock Growth: تغيّر إجمالي الكمية خلال الشهر الحالي ---
-    final currentTotalQty = products.fold<int>(0, (s, p) => s + p.quantity);
-    final thisMonthStart = SalesMath.monthStart(now);
-    final netChangeThisMonth = transactions
-        .where(
-          (t) => !DateTime.fromMillisecondsSinceEpoch(
-            t.timestamp,
-          ).isBefore(thisMonthStart),
-        )
-        .fold<int>(0, (s, t) => s + t.quantityChange);
-    final startOfMonthQty = currentTotalQty - netChangeThisMonth;
-    final stockGrowth = startOfMonthQty == 0
-        ? 0.0
-        : (netChangeThisMonth / startOfMonthQty) * 100;
-
-    // --- أكتر 3 categories إيراداً + بياناتهم لآخر 6 شهور ---
-    final incomeTx = transactions.where((t) => t.isIncome).toList();
-    final Map<String, double> revenueByCategory = {};
-    for (final t in incomeTx) {
-      // بدل سطرين match و category
-      final category = findProduct(products, t)?.category ?? 'Other';
-      revenueByCategory[category] =
-          (revenueByCategory[category] ?? 0) + t.amount;
-    }
-    final chartCategories = revenueByCategory.keys.toList()
-      ..sort((a, b) => revenueByCategory[b]!.compareTo(revenueByCategory[a]!));
-    final topCategories = chartCategories.take(3).toList();
-
-    final months = ReportMath.lastNMonths(now, 6);
-    final monthLabels = months.map(ReportMath.monthLabel).toList();
-
-    final categorySeries = topCategories.map((cat) {
-      return months.map((m) {
-        final mEnd = DateTime(m.year, m.month + 1, 1);
-        return incomeTx
-            .where((t) {
-              // بدل 3 أسطر match و tCategory
-              final tCategory = findProduct(products, t)?.category ?? 'Other';
-              final d = DateTime.fromMillisecondsSinceEpoch(t.timestamp);
-              return tCategory == cat && !d.isBefore(m) && d.isBefore(mEnd);
-            })
-            .fold<double>(0.0, (s, t) => s + t.amount);
-      }).toList();
-    }).toList();
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -227,7 +162,7 @@ class ReportsScreen extends StatelessWidget {
                         children: [
                           for (int i = 0; i < topCategories.length; i++) ...[
                             if (i > 0) const SizedBox(width: 8),
-                            _buildCryptoIndicator(
+                            _buildLegendItem(
                               "• ${topCategories[i]}",
                               categoryColors[i % categoryColors.length],
                             ),
@@ -471,7 +406,7 @@ class ReportsScreen extends StatelessWidget {
   }
 
   // ويدجيت مساعدة لتكست الـ Crypto
-  Widget _buildCryptoIndicator(String label, Color color) {
+  Widget _buildLegendItem(String label, Color color) {
     return Text(
       label,
       style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900),
