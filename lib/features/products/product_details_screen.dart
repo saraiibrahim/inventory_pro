@@ -6,6 +6,8 @@ import 'package:inventory_pro/logic/cubits/product_cubit.dart';
 import 'package:inventory_pro/logic/cubits/transaction_cubit.dart'; // 🔧
 import 'package:inventory_pro/features/products/add_product.dart';
 import 'package:inventory_pro/widgets/product_image.dart';
+import 'package:inventory_pro/widgets/soft_ui.dart';
+import 'package:inventory_pro/widgets/restock_dialog.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final ProductModel product;
@@ -80,13 +82,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildSoftCircleButton(
-                      context: context,
+                    SoftCircleButton(
                       icon: Icons.arrow_back,
                       onTap: () => Navigator.pop(context),
                     ),
-                    _buildSoftCircleButton(
-                      context: context,
+                    SoftCircleButton(
                       icon: Icons.edit_outlined,
                       onTap: () => Navigator.push(
                         // 🔧
@@ -138,8 +138,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     // سهم النقصان الجانبي المثلث (-)
                     Positioned(
                       left: 0,
-                      child: _buildSideTriangleStepper(
-                        context: context,
+                      child: SideTriangleStepper(
                         icon: Icons.remove,
                         isLeft: true,
                         onTap: () {
@@ -163,8 +162,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     // سهم الزيادة الجانبي المثلث (+)
                     Positioned(
                       right: 0,
-                      child: _buildSideTriangleStepper(
-                        context: context,
+                      child: SideTriangleStepper(
                         icon: Icons.add,
                         isLeft: false,
                         onTap: () {
@@ -216,29 +214,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    _buildSoftPill(
-                      context: context,
+                    SoftPill(
                       label:
                           "Val: \$${(widget.product.price * currentQuantity).toStringAsFixed(0)}",
                     ),
                     const SizedBox(width: 12),
-                    _buildSoftPill(
-                      context: context,
-                      label: "SKU:  ${widget.product.sku}",
-                    ),
+                    SoftPill(label: "SKU:  ${widget.product.sku}"),
                     const SizedBox(width: 12),
                     // الكبسولة البارزة المرتبطة بلون الـ Primary الخاص بالـ Theme
-                    _buildHighlightPill(
+                    HighlightPill(
                       label: "$currentQuantity Units",
                       bgColor: isLowStock
                           ? colorScheme.error
                           : colorScheme.primary,
                     ),
                     const SizedBox(width: 12),
-                    _buildSoftPill(
-                      context: context,
-                      label: isLowStock ? "Low Stock" : "In Stock",
-                    ),
+                    SoftPill(label: isLowStock ? "Low Stock" : "In Stock"),
                   ],
                 ),
               ),
@@ -285,8 +276,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       Expanded(
                         child: InkWell(
-                          onTap: () =>
-                              _showRestockDialog(context, widget.product),
+                          onTap: _restock,
                           child: Center(
                             child: Text(
                               "Quick Restock Inventory",
@@ -312,216 +302,43 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget _buildSoftCircleButton({
-    required BuildContext context,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Icon(icon, color: colorScheme.onSurface, size: 20),
-      ),
+  Future<void> _restock() async {
+    final added = await showRestockDialog(context, widget.product);
+    if (added == null || added <= 0 || !mounted) return;
+
+    context.read<ProductCubit>().updateProduct(
+      widget.product.copyWith(quantity: currentQuantity + added),
+    );
+    _recordTransaction(
+      name: "${widget.product.name} (Restock)",
+      amount: widget.product.costPrice * added,
+      isIncome: false,
+      qtyChange: added,
+    );
+    setState(() => currentQuantity += added);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Stock updated successfully!")),
     );
   }
+}
 
-  Widget _buildSideTriangleStepper({
-    required BuildContext context,
-    required IconData icon,
-    required bool isLeft,
-    required VoidCallback onTap,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 42,
-        height: 70,
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: isLeft
-              ? const BorderRadius.only(
-                  topRight: Radius.circular(35),
-                  bottomRight: Radius.circular(35),
-                )
-              : const BorderRadius.only(
-                  topLeft: Radius.circular(35),
-                  bottomLeft: Radius.circular(35),
-                ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 10,
-              offset: Offset(isLeft ? 3 : -3, 3),
-            ),
-          ],
-        ),
-        child: Icon(icon, color: colorScheme.onSurface, size: 22),
-      ),
-    );
-  }
-
-  Widget _buildSoftPill({
-    required BuildContext context,
-    required String label,
-  }) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w700,
-          color: colorScheme.onSurface.withValues(alpha: 0.7),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHighlightPill({required String label, required Color bgColor}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: bgColor.withValues(alpha: 0.35),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
-
-  void _showRestockDialog(BuildContext context, ProductModel product) {
-    final TextEditingController quantityController = TextEditingController();
-    final colorScheme = Theme.of(context).colorScheme;
-
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: Text(
-          "Restock ${product.name}",
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: colorScheme.onSurface,
-          ),
-        ),
-        content: TextField(
-          controller: quantityController,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            hintText: "Enter added quantity...",
-            filled: true,
-            fillColor: colorScheme.surfaceContainerHighest.withValues(
-              alpha: 0.4,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text("Cancel"),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: colorScheme.primary,
-              foregroundColor: colorScheme.onPrimary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            onPressed: () {
-              final addedVal = int.tryParse(quantityController.text) ?? 0;
-              if (addedVal > 0) {
-                final updated = product.copyWith(
-                  quantity: currentQuantity + addedVal,
-                );
-                context.read<ProductCubit>().updateProduct(updated);
-                _recordTransaction(
-                  name: "${widget.product.name} (Restock)",
-                  amount: widget.product.costPrice * addedVal,
-                  isIncome: false,
-                  qtyChange: addedVal,
-                );
-
-                setState(() {
-                  currentQuantity += addedVal;
-                });
-              }
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Stock updated successfully!")),
-              );
-            },
-            child: const Text("Update"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formattedNow() {
-    final now = DateTime.now();
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    final hour = now.hour.toString().padLeft(2, '0');
-    final minute = now.minute.toString().padLeft(2, '0');
-    return "${now.day} ${months[now.month - 1]} • $hour:$minute";
-  }
+String _formattedNow() {
+  final now = DateTime.now();
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  final hour = now.hour.toString().padLeft(2, '0');
+  final minute = now.minute.toString().padLeft(2, '0');
+  return "${now.day} ${months[now.month - 1]} • $hour:$minute";
 }

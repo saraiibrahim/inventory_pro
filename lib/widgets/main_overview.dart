@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:inventory_pro/core/theme/app_theme.dart'; // استيراد الثيم الموحد
+import 'package:inventory_pro/core/painters/sparkline_painter.dart';
+import 'package:inventory_pro/core/theme/app_theme.dart';
+import 'package:inventory_pro/widgets/bento_card.dart'; // استيراد الثيم الموحد
 
 class MainOverviewCard extends StatelessWidget {
   final String totalSales;
@@ -59,7 +61,9 @@ class MainOverviewCard extends StatelessWidget {
                       ? Colors.white.withValues(alpha: 0.04)
                       : Colors.white.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.02)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.02),
+                  ),
                 ),
                 child: Text(
                   "View metrics",
@@ -75,7 +79,7 @@ class MainOverviewCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           // 2️⃣ الكارت الكبير مع الشارت
-          _BentoCard(
+          BentoCard(
             height: 140,
             theme: theme,
             isDark: isDark,
@@ -148,7 +152,7 @@ class MainOverviewCard extends StatelessWidget {
                     child: SizedBox(
                       height: double.infinity,
                       child: CustomPaint(
-                        painter: _DynamicMergedAreaPainter(
+                        painter: SparklinePainter(
                           dataPoints: sparklineData,
                           color: AppTheme.neonGreen,
                         ),
@@ -165,7 +169,7 @@ class MainOverviewCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: _BentoCard(
+                child: BentoCard(
                   height: 90,
                   theme: theme,
                   isDark: isDark,
@@ -181,7 +185,7 @@ class MainOverviewCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _BentoCard(
+                child: BentoCard(
                   height: 90,
                   theme: theme,
                   isDark: isDark,
@@ -202,7 +206,7 @@ class MainOverviewCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: _BentoCard(
+                child: BentoCard(
                   height: 90,
                   theme: theme,
                   isDark: isDark,
@@ -275,149 +279,5 @@ class MainOverviewCard extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class _BentoCard extends StatelessWidget {
-  final Widget child;
-  final ThemeData theme;
-  final bool isDark;
-  final double height;
-  final EdgeInsetsGeometry padding;
-
-  const _BentoCard({
-    required this.child,
-    required this.theme,
-    required this.isDark,
-    required this.height,
-    this.padding = const EdgeInsets.all(16),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    // 🎨 سحب لون الكارت مباشرة من ملف الثيم لتوحيد جميع الكروت بالأبلكيشن
-
-    // 🔒 تأثير الظل المزدوج الفاخر لتثبيت الكارت في الـ Light Mode
-    final List<BoxShadow> bentoShadows = isDark
-        ? []
-        : [
-            BoxShadow(
-              color: theme.colorScheme.primary.withValues(alpha: 0.025),
-              blurRadius: 20,
-              spreadRadius: 0,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.008),
-              blurRadius: 4,
-              spreadRadius: 0,
-              offset: const Offset(0, 2),
-            ),
-          ];
-
-    return Container(
-      height: height,
-      padding: padding,
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: theme.colorScheme.outline, width: 1),
-        boxShadow: bentoShadows,
-      ),
-      child: child,
-    );
-  }
-}
-
-class _DynamicMergedAreaPainter extends CustomPainter {
-  final List<double> dataPoints;
-  final Color color;
-
-  _DynamicMergedAreaPainter({required this.dataPoints, required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (dataPoints.length < 2) return;
-
-    final path = Path();
-    final areaPath = Path();
-
-    double max = dataPoints.reduce((a, b) => a > b ? a : b);
-    double min = dataPoints.reduce((a, b) => a < b ? a : b);
-    double range = max - min == 0 ? 1.0 : max - min;
-    double widthStep = size.width / (dataPoints.length - 1);
-
-    List<Offset> points = [];
-    for (int i = 0; i < dataPoints.length; i++) {
-      double x = i * widthStep;
-      double normalizedY = (dataPoints[i] - min) / range;
-      double y =
-          size.height -
-          (normalizedY * size.height * 0.8) -
-          (size.height * 0.1); // ملمومة من الهوامش عشان متبقاش طايرة برة
-      points.add(Offset(x, y));
-    }
-
-    path.moveTo(points[0].dx, points[0].dy);
-    areaPath.moveTo(points[0].dx, size.height);
-    areaPath.lineTo(points[0].dx, points[0].dy);
-
-    for (int i = 0; i < points.length - 1; i++) {
-      Offset p0 = points[i];
-      Offset p1 = points[i + 1];
-
-      double controlX1 = p0.dx + (p1.dx - p0.dx) / 2;
-      double controlY1 = p0.dy;
-      double controlX2 = p0.dx + (p1.dx - p0.dx) / 2;
-      double controlY2 = p1.dy;
-
-      path.cubicTo(controlX1, controlY1, controlX2, controlY2, p1.dx, p1.dy);
-      areaPath.cubicTo(
-        controlX1,
-        controlY1,
-        controlX2,
-        controlY2,
-        p1.dx,
-        p1.dy,
-      );
-    }
-
-    areaPath.lineTo(size.width, size.height);
-    areaPath.close();
-
-    final Shader horizontalFadeShader = LinearGradient(
-      begin: Alignment.centerLeft,
-      end: Alignment.centerRight,
-      colors: [
-        color.withValues(alpha: 0.0),
-        color.withValues(alpha: 1.0),
-        color.withValues(alpha: 1.0),
-        color.withValues(alpha: 0.0),
-      ],
-      stops: const [0.0, 0.1, 0.9, 1.0],
-    ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
-
-    final paint = Paint()
-      ..shader = horizontalFadeShader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-
-    final areaPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [color.withValues(alpha: 0.12), color.withValues(alpha: 0.0)],
-      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height))
-      ..style = PaintingStyle.fill;
-
-    canvas.drawPath(areaPath, areaPaint);
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _DynamicMergedAreaPainter oldDelegate) {
-    return oldDelegate.dataPoints != dataPoints || oldDelegate.color != color;
   }
 }

@@ -241,18 +241,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               const SizedBox(height: 24),
 
-              _buildSectionLabel("PRODUCT INFORMATION", primaryColor),
-              const SizedBox(height: 12),
-
-              _buildCustomTextField(
-                context,
-                controller: _nameController,
-                label: "Product Title",
-                hint: "e.g. Leather Executive Bag",
-                icon: Icons.inventory_2_outlined,
-                validator: (val) =>
-                    val == null || val.isEmpty ? "Required field" : null,
-              ),
               const SizedBox(height: 16),
 
               Container(
@@ -294,7 +282,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               const SizedBox(height: 24),
 
-              _buildSectionLabel("PRICING & STOCK", primaryColor),
+              SectionLabel("PRICING & STOCK", primaryColor),
               const SizedBox(height: 12),
 
               Row(
@@ -399,7 +387,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
-  Widget _buildSectionLabel(String text, Color color) {
+  Widget SectionLabel(String text, Color color) {
     return Text(
       text,
       style: TextStyle(

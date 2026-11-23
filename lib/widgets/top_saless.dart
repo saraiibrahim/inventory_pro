@@ -79,16 +79,6 @@ class TopSalesWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 2),
-                        Text(
-                          "Top sellers overall",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? Colors.white70
-                                : theme.textTheme.bodyLarge?.color,
-                          ),
-                        ),
                       ],
                     ),
                     Icon(
