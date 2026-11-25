@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:inventory_pro/core/utils/compact_number.dart';
 import 'package:inventory_pro/core/utils/product_lookup.dart';
 import 'package:inventory_pro/core/utils/sales_math.dart';
 import 'package:inventory_pro/data/models/product_model.dart';
@@ -27,6 +28,19 @@ void main() {
         DateTime(2025, 12, 1),
       );
     });
+  });
+
+  group('compactNumber', () {
+    test('small numbers stay as they are', () {
+      expect(compactNumber(0), '0');
+      expect(compactNumber(12.5), '12.5');
+    });
+    test('thousands use k', () => expect(compactNumber(1250), '1.3k'));
+    test('millions use M', () => expect(compactNumber(1200000), '1.2M'));
+    test(
+      'rounding does not give 1000k',
+      () => expect(compactNumber(999960), '1M'),
+    );
   });
 
   group('findProduct', () {

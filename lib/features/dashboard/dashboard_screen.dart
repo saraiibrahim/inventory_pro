@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_pro/core/theme/theme_manager.dart';
+import 'package:inventory_pro/core/utils/compact_number.dart';
 import 'package:inventory_pro/data/models/product_model.dart';
 import 'package:inventory_pro/logic/cubits/product_cubit.dart';
 import 'package:inventory_pro/widgets/custom_bento_nav_bar.dart';
@@ -82,12 +83,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           MainOverviewCard(
-            totalSales: "\$${totalRevenue.toStringAsFixed(1)}",
+            totalSales: "\$${compactNumber(totalRevenue)}",
             salesGrowth: growth,
             totalProducts: products.length,
             lowStockItems: lowStock,
             outOfStockItems: outOfStock,
             sparklineData: sparkline,
+            onViewMetrics: () => setState(() => currentIndex = 3),
           ),
           const SizedBox(height: 10),
           const TopSalesWidget(),

@@ -10,6 +10,7 @@ class MainOverviewCard extends StatelessWidget {
   final int lowStockItems;
   final int outOfStockItems;
   final List<double> sparklineData;
+  final VoidCallback onViewMetrics;
 
   const MainOverviewCard({
     super.key,
@@ -19,6 +20,7 @@ class MainOverviewCard extends StatelessWidget {
     required this.lowStockItems,
     required this.outOfStockItems,
     required this.sparklineData,
+    required this.onViewMetrics,
   });
 
   @override
@@ -51,26 +53,31 @@ class MainOverviewCard extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.04)
-                      : Colors.white.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.02),
+              GestureDetector(
+                onTap: onViewMetrics,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
                   ),
-                ),
-                child: Text(
-                  "View metrics",
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: isDark ? Colors.white70 : theme.colorScheme.primary,
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? Colors.white.withValues(alpha: 0.04)
+                        : Colors.white.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.02),
+                    ),
+                  ),
+                  child: Text(
+                    "View metrics",
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w800,
+                      color: isDark
+                          ? Colors.white70
+                          : theme.colorScheme.primary,
+                    ),
                   ),
                 ),
               ),

@@ -109,7 +109,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           content: Text(
             _isEdit ? "تم تعديل المنتج!" : "تم إضافة المنتج بنجاح!",
           ),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.green.withAlpha(200),
         ),
       );
 
@@ -282,7 +282,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               const SizedBox(height: 24),
 
-              SectionLabel("PRICING & STOCK", primaryColor),
+              sectionLabel("PRICING & STOCK", primaryColor),
               const SizedBox(height: 12),
 
               Row(
@@ -295,8 +295,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       hint: "299.00",
                       icon: Icons.attach_money_rounded,
                       keyboardType: TextInputType.number,
-                      validator: (val) =>
-                          val == null || val.isEmpty ? "Required" : null,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) return "Required";
+                        final n = double.tryParse(val);
+                        if (n == null || n < 0) return "Enter a valid price";
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -308,6 +312,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       hint: "180.00",
                       icon: Icons.money_off_rounded,
                       keyboardType: TextInputType.number,
+                      validator: (val) {
+                        if (val == null || val.isEmpty) return null;
+                        final n = double.tryParse(val);
+                        if (n == null || n < 0) return "Enter a valid cost";
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -324,8 +334,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       hint: "25",
                       icon: Icons.numbers_rounded,
                       keyboardType: TextInputType.number,
-                      validator: (val) =>
-                          val == null || val.isEmpty ? "Required" : null,
+
+                      validator: (val) {
+                        if (val == null || val.isEmpty) return "Required";
+                        final n = int.tryParse(val);
+                        if (n == null) return "Enter a whole number";
+                        if (n < 0) return "Can't be negative";
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(width: 14),
@@ -387,7 +403,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
-  Widget SectionLabel(String text, Color color) {
+  Widget sectionLabel(String text, Color color) {
     return Text(
       text,
       style: TextStyle(

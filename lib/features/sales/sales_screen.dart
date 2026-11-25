@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // 🔧
+import 'package:inventory_pro/core/utils/compact_number.dart';
 import 'package:inventory_pro/data/models/transaction_model.dart'; // 🔧
 import 'package:inventory_pro/logic/cubits/transaction_cubit.dart'; // 🔧
 import 'package:inventory_pro/core/utils/sales_math.dart'; // 🔧
@@ -145,36 +146,6 @@ class _SalesScreenState extends State<SalesScreen> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: cardBg,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: borderGlint),
-                        boxShadow: cardShadows,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.calendar_today_rounded,
-                            size: 14,
-                            color: primaryGreen,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            "Jun 2026",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: mainTextColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -208,7 +179,7 @@ class _SalesScreenState extends State<SalesScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              "\$${totalRevenue.toStringAsFixed(1)}",
+                              "\$${compactNumber(totalRevenue)}",
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
@@ -284,7 +255,7 @@ class _SalesScreenState extends State<SalesScreen> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              "\$${avgOrder.toStringAsFixed(1)}",
+                              "\$${compactNumber(avgOrder)}",
                               style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900,
@@ -400,4 +371,3 @@ class _SalesScreenState extends State<SalesScreen> {
     );
   }
 }
-

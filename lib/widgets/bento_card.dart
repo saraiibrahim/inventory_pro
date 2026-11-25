@@ -8,6 +8,7 @@ class BentoCard extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   const BentoCard({
+    super.key,
     required this.child,
     required this.theme,
     required this.isDark,
@@ -17,9 +18,6 @@ class BentoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🎨 سحب لون الكارت مباشرة من ملف الثيم لتوحيد جميع الكروت بالأبلكيشن
-
-    // 🔒 تأثير الظل المزدوج الفاخر لتثبيت الكارت في الـ Light Mode
     final List<BoxShadow> bentoShadows = isDark
         ? []
         : [

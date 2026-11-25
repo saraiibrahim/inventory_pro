@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // 🔧 إضافة
+import 'package:inventory_pro/core/utils/compact_number.dart';
 import 'package:inventory_pro/data/models/product_model.dart';
 import 'package:inventory_pro/data/models/transaction_model.dart'; // 🔧
 import 'package:inventory_pro/logic/cubits/product_cubit.dart';
@@ -216,7 +217,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     SoftPill(
                       label:
-                          "Val: \$${(widget.product.price * currentQuantity).toStringAsFixed(0)}",
+                          "Val: \$${(compactNumber(widget.product.price * currentQuantity))}",
                     ),
                     const SizedBox(width: 12),
                     SoftPill(label: "SKU:  ${widget.product.sku}"),

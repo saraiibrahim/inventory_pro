@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inventory_pro/core/theme/app_theme.dart';
+import 'package:inventory_pro/core/utils/compact_number.dart';
 import 'package:inventory_pro/core/utils/product_lookup.dart';
 import 'package:inventory_pro/core/utils/sales_math.dart';
 import 'package:inventory_pro/data/models/product_model.dart';
@@ -176,7 +177,7 @@ class TopSalesWidget extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "\$${p.revenue.toStringAsFixed(0)}",
+                                    "\$${compactNumber(p.revenue)}",
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w900,

@@ -99,7 +99,7 @@ class TransactionDetailsSheet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Entity / Client",
+                      "Item",
                       style: TextStyle(fontSize: 11, color: textMuted),
                     ),
                     const SizedBox(height: 4),
@@ -129,7 +129,6 @@ class TransactionDetailsSheet extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // 📝 عناصر الفاتورة والعمولات
           _buildDetailRow(
             "Date & Time",
             transaction.date,
@@ -138,77 +137,40 @@ class TransactionDetailsSheet extends StatelessWidget {
           ),
           const Divider(height: 20, color: Colors.grey),
           _buildDetailRow(
-            "Payment Method",
-            "Apple Pay / Credit Card",
-            mainTextColor,
-            textMuted,
-          ),
-          const Divider(height: 20, color: Colors.grey),
-          _buildDetailRow(
-            "VAT / Tax (14%)",
-            "\$${(transaction.amount * 0.14).toStringAsFixed(2)}",
+            "Quantity",
+            transaction.quantityChange == 0
+                ? "—"
+                : "${transaction.quantityChange.abs()} unit(s)",
             mainTextColor,
             textMuted,
           ),
           const Divider(height: 20, color: Colors.grey),
           _buildDetailRow(
             "Transaction Type",
-            transaction.isIncome
-                ? "Sales Order (Waerhouse In)"
-                : "Restock Expense (Out)",
+            transaction.isIncome ? "Sale (stock out)" : "Restock (stock in)",
             mainTextColor,
             textMuted,
           ),
           const SizedBox(height: 28),
 
-          // 🖨️ أزرار المشاركة والطباعة
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    side: BorderSide(color: borderGlint),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(
-                    Icons.share_outlined,
-                    size: 18,
-                    color: mainTextColor,
-                  ),
-                  label: Text(
-                    "Share PDF",
-                    style: TextStyle(
-                      color: mainTextColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                backgroundColor: primaryColor,
+                foregroundColor: isDark ? Colors.black : Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: primaryColor,
-                    foregroundColor: isDark ? Colors.black : Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.print_rounded, size: 18),
-                  label: const Text(
-                    "Print Receipt",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                "Done",
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ],
+            ),
           ),
           const SizedBox(height: 10),
         ],
